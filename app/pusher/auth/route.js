@@ -3,15 +3,18 @@ import { NextResponse } from "next/server"
 const Pusher = require("pusher")
 
 export async function POST(request) {
-  const cookieStore = cookies()
-  const adminCookie = cookieStore.get("petadoption") ? cookieStore.get("petadoption").value : ""
+  const cookieStore = await cookies();
+  const petAdoptionCookie = cookieStore.get("petadoption");
+
+  // Safely extract the cookie value or default to an empty string
+  const adminCookie = petAdoptionCookie ? petAdoptionCookie.value : "";
 
   if (adminCookie == process.env.SESSIONCOOKIEVALUE) {
     const pusher = new Pusher({
       appId: process.env.PUSHERID,
-      key: process.env.PUSHERKEY,
+      key: process.env.NEXT_PUBLIC_PUSHERKEY,
       secret: process.env.PUSHERSECRET,
-      cluster: "us3",
+      cluster: "us2",
       useTLS: true
     })
 
