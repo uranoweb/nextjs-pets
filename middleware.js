@@ -1,10 +1,11 @@
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 
-export function middleware(request) {
+export async function middleware(request) {
   if (request.url.includes("/admin")) {
-    const cookieStore = cookies()
-    const adminCookie = cookieStore.get("petadoption") ? cookieStore.get("petadoption").value : ""
+    const cookieStore = await cookies()
+    const petAdoptionCookie = cookieStore.get("petadoption");
+    const adminCookie = petAdoptionCookie ? petAdoptionCookie.value : "";
 
     if (adminCookie == process.env.SESSIONCOOKIEVALUE) {
       return NextResponse.next()
